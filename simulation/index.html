@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="DOPA-SYNC synthetic adaptive traffic signal simulation">
+  <title>DOPA-SYNC | Adaptive Signal Lab</title><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar"><div><div class="eyebrow">TRAFFIC INTELLIGENCE LAB</div><h1>DOPA-SYNC</h1></div><div class="status"><span id="policyDot" class="dot"></span><span id="policyStatus">Baseline only · policy not loaded</span></div></header>
+  <main>
+    <section class="toolbar panel" aria-label="Simulation controls">
+      <button id="startBtn" class="primary">Start</button><button id="pauseBtn" disabled>Pause</button><button id="resetBtn">Reset</button>
+      <label>Controller <select id="controller"><option value="rl">Trained agent</option><option value="fixed">Fixed time</option></select></label>
+      <label>Speed <select id="speed"><option value="1">1×</option><option value="4">4×</option><option value="10">10×</option></select></label>
+      <label>Demand <select id="demand"><option value="1">Nominal</option><option value="0.6">Light</option><option value="1.4">Heavy</option></select></label>
+      <label class="file-label">Load policy JSON <input id="policyFile" type="file" accept="application/json"></label>
+      <button id="csvBtn">Export run CSV</button>
+    </section>
+    <div id="errorBox" class="error" role="alert" hidden></div>
+    <section class="layout">
+      <section class="panel sim-panel"><div class="section-head"><div><div class="eyebrow">LIVE INTERSECTION</div><h2>Two-phase control</h2></div><div class="clock"><span id="simClock">00:00</span><small>SIM TIME</small></div></div>
+        <canvas id="scene" width="900" height="520" aria-label="Four-way intersection with live signal and traffic state"></canvas>
+        <div class="sim-foot"><span id="phaseLabel"><i class="signal ns active"></i> NS green</span><span id="phaseAge">Phase age 0 s</span><span id="runState">Paused</span></div>
+      </section>
+      <aside class="panel agent-panel"><div class="eyebrow">AGENT CONTROL</div><h2>Decision trace</h2>
+        <div class="status-line"><span>Policy</span><strong id="loadedStatus">Not loaded</strong></div>
+        <div class="status-line"><span>Encoded state</span><strong id="stateValue">—</strong></div>
+        <div class="status-line"><span>Available actions</span><strong id="availableActions">—</strong></div>
+        <div class="status-line"><span>Chosen action</span><strong id="chosenAction">—</strong></div>
+        <div class="status-line"><span>Selected Q-value</span><strong id="qValue">—</strong></div>
+        <div class="status-line"><span>Q estimate Q(s,a)</span><strong id="expectedReward">—</strong></div>
+        <div class="status-line"><span>Observed reward</span><strong id="observedReward">—</strong></div>
+        <div class="status-line"><span>Future value γ max Q</span><strong id="futureValue">—</strong></div>
+        <div class="status-line"><span>Prediction signal</span><strong id="deltaLabel">—</strong></div>
+        <div class="delta-number" id="deltaValue">—</div><canvas id="deltaChart" width="520" height="150" aria-label="Recent computed temporal difference errors"></canvas>
+        <p class="note">δ = r + γ max Q(s′,a) − Q(s,a). This is a model-computed reward prediction error, not a dopamine measurement. The browser reads the trained table without updating it.</p>
+        <details><summary>Training metadata</summary><pre id="metadata">Train and export a policy, then load artifacts/policy.json.</pre></details>
+      </aside>
+      <section class="panel metrics-panel"><div class="eyebrow">MEASURED RUN METRICS</div><h2>Traffic performance</h2><div class="metric-grid">
+        <div class="metric"><span>NS queue</span><strong id="nsQueue">0</strong><small>vehicles</small></div><div class="metric"><span>EW queue</span><strong id="ewQueue">0</strong><small>vehicles</small></div>
+        <div class="metric"><span>Mean completed wait</span><strong id="meanWait">0.0</strong><small>seconds / vehicle</small></div><div class="metric"><span>Completed</span><strong id="completed">0</strong><small>vehicles</small></div>
+        <div class="metric"><span>Cumulative reward</span><strong id="reward">0.0</strong><small>queue burden score</small></div><div class="metric"><span>Phase switches</span><strong id="switches">0</strong><small>count</small></div>
+      </div><div class="status-line"><span>Current action</span><strong id="actionDetail">Waiting for start</strong></div></section>
+      <section class="panel details-panel"><div class="eyebrow">MODEL NOTES</div><h2>Simulation contract</h2><p>Discrete one-second steps; synthetic Poisson arrivals; one vehicle discharged per green step. Opposing approaches share two aggregate queues. A phase switch is available only after minimum green; switching is atomic, so conflicting greens cannot occur.</p><p>Metrics reflect the current browser run. Demand scales both configured rates and is recorded in the CSV. Use the same setting and seed for a controlled comparison.</p></section>
+    </section>
+    <footer>Computational learning demonstration · synthetic, uncalibrated traffic · no biological or real-world traffic validation</footer>
+  </main><script type="module" src="app.js"></script>
+</body></html>

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "seed": 1729,
+  "environment": {
+    "episode_steps": 300,
+    "step_seconds": 1.0,
+    "arrival_rate_ns_per_step": 0.32,
+    "arrival_rate_ew_per_step": 0.28,
+    "discharge_per_step": 1,
+    "minimum_green_steps": 6,
+    "queue_bin_edges": [0, 3, 7, 12],
+    "switching_cost": 0.0
+  },
+  "agent": {
+    "episodes": 240,
+    "learning_rate": 0.18,
+    "discount_factor": 0.96,
+    "epsilon_start": 1.0,
+    "epsilon_end": 0.04,
+    "epsilon_decay_episodes": 180
+  },
+  "baseline": {
+    "phase_duration_steps": 12
+  },
+  "evaluation": {
+    "scenarios": 30,
+    "seed_start": 90000
+  }
+}

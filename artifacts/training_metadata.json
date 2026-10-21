@@ -1,0 +1,13 @@
+{
+  "seed": 1729,
+  "episodes": 240,
+  "state_count": 224,
+  "action_count": 2,
+  "learning_rate": 0.18,
+  "discount_factor": 0.96,
+  "epsilon_start": 1.0,
+  "epsilon_end": 0.04,
+  "python": "3.11.9",
+  "q_table_changed": true,
+  "td_error_count": 72000
+}
